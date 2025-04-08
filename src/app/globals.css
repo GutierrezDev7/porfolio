@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000; /* Alterado para preto */
+  --foreground: #ffffff; /* Alterado para branco */
 }
 
 @theme inline {
