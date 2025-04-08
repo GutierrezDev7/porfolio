@@ -1,103 +1,509 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState, useEffect, useRef } from 'react';
+import { motion } from "framer-motion";
+import { Mail, MapPin, Phone, Instagram } from 'lucide-react';
+
+// Implementação manual de debounce
+function debounce(func: (...args: any[]) => void, wait: number) {
+  let timeout: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
+const App: React.FC = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const techRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const technologies = [
+    { name: "TypeScript", icon: "devicon-typescript-plain", color: "bg-blue-600" },
+    { name: "React", icon: "devicon-react-original", color: "bg-cyan-500" },
+    { name: "Node.js", icon: "devicon-nodejs-plain", color: "bg-green-600" },
+    { name: "Tailwind", icon: "devicon-tailwindcss-plain", color: "bg-sky-400" },
+    { name: "HTML5", icon: "devicon-html5-plain", color: "bg-orange-500" },
+  ];
+
+  // Handle scroll progress
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+      setIsVisible(window.scrollY > 300);
+    }, 100);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Reveal elements on scroll
+  useEffect(() => {
+    const revealSections = () => {
+      const sections = document.querySelectorAll('.reveal-section');
+      sections.forEach((section) => {
+        const sectionTop = section.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        if (sectionTop < windowHeight - 100) {
+          section.classList.add('active');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealSections);
+    revealSections();
+    
+    return () => window.removeEventListener('scroll', revealSections);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const rotateCarousel = (direction: "next" | "prev") => {
+    if (direction === "next") {
+      setActiveIndex((prev: number) => (prev + 1) % technologies.length);
+    } else {
+      setActiveIndex((prev: number) => (prev - 1 + technologies.length) % technologies.length);
+    }
+  };
+
+  const projects = [
+    {
+      id: 1,
+      title: 'E-commerce Platform',
+      description: 'Uma plataforma de comércio eletrônico completa com painel de administração e gateway de pagamento integrado.',
+      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+      image: 'https://public.readdy.ai/ai/img_res/6f11e0e5f9b93ff4daa99aa9dec49c48.jpg'
+    },
+    {
+      id: 2,
+      title: 'Dashboard Analytics',
+      description: 'Painel de análise de dados em tempo real com visualizações interativas e relatórios personalizáveis.',
+      tech: ['TypeScript', 'React', 'D3.js', 'Firebase'],
+      image: 'https://public.readdy.ai/ai/img_res/f12ec3ef4ddefae77827063d5c48b62d.jpg'
+    },
+    {
+      id: 3,
+      title: 'App de Gestão de Tarefas',
+      description: 'Aplicativo de produtividade para gerenciamento de tarefas com recursos de colaboração em equipe.',
+      tech: ['React Native', 'Redux', 'Node.js', 'MongoDB'],
+      image: 'https://public.readdy.ai/ai/img_res/27dbbae0cc1b568cb2c8aff63af82d62.jpg'
+    },
+    {
+      id: 4,
+      title: 'Plataforma de Cursos Online',
+      description: 'Sistema de gerenciamento de aprendizado com conteúdo em vídeo, quizzes e certificados.',
+      tech: ['Next.js', 'Tailwind CSS', 'PostgreSQL', 'AWS'],
+      image: 'https://public.readdy.ai/ai/img_res/6615f15e6772ad0a1486ea53ebf0ab3e.jpg'
+    }
+  ];
+
+  const buttonBaseStyles = "px-8 py-6 text-lg transition-transform duration-300 !rounded-button whitespace-nowrap cursor-pointer";
+  const buttonPrimaryStyles = "bg-transparent border-2 border-purple-500 text-white hover:bg-purple-500/10";
+  const buttonExpandEffect = "hover:scale-105";
+
+  const arrowButtonStyles = "w-12 h-12 flex items-center justify-center bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full shadow-md hover:scale-110 transition-transform duration-300 z-10";
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen text-white font-sans">
+      {/* Scroll Progress Bar */}
+      <div 
+        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 z-50" 
+        style={{ width: `${scrollProgress}%` }}
+      />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Back to Top Button */}
+      <motion.button
+        onClick={scrollToTop}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 40 }}
+        transition={{ duration: 0.4 }}
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-teal-500 to-green-500 p-3 rounded-full shadow-xl hover:shadow-[0_0_20px_rgba(72,187,120,0.7)] transition-all duration-300 z-40 cursor-pointer"
+      >
+        <i className="fas fa-arrow-up text-white text-lg"></i>
+      </motion.button>
+
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 w-full bg-gray-900/80 backdrop-blur-md z-40 shadow-md">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent hover:drop-shadow-glow transition duration-300">
+            GG
+          </div>
+          <div className="hidden md:flex space-x-8">
+            {[
+              { label: "Início", ref: heroRef },
+              { label: "Sobre", ref: aboutRef },
+              { label: "Tecnologias", ref: techRef },
+              { label: "Projetos", ref: projectsRef },
+              { label: "Contato", ref: contactRef },
+            ].map(({ label, ref }) => (
+              <button
+                key={label}
+                onClick={() => scrollToSection(ref)}
+                className="text-gray-300 hover:text-white transition duration-300 p-2 rounded-lg hover:shadow-[0_0_10px_rgba(168,85,247,0.7)]"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </nav>
+
+      {/* Hero Section */}
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center pt-24"
+        style={{
+          backgroundImage: `url('https://public.readdy.ai/ai/img_res/c4cc4d143787a60ea64e9f6de0ad8613.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-black/30"></div>
+        <div className="container mx-auto px-6 z-10 text-center">
+          <div className="max-w-3xl mx-auto">
+            <motion.h1
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-5xl md:text-7xl font-bold mb-6 p-2 rounded-lg inline-block bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+            >
+              Gustavo Gutierrez
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 40, blur: 10 }}
+              animate={{ opacity: 1, y: 0, blur: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl md:text-2xl text-gray-300 mb-8 p-2 rounded-lg"
+            >
+              Desenvolvedor Full Stack apaixonado por transformar ideias em experiências digitais.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-wrap gap-4 justify-center"
+            >
+              <Button
+                onClick={() => scrollToSection(projectsRef)}
+                className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}
+              >
+                Ver Projetos
+              </Button>
+              <Button
+                onClick={() => scrollToSection(contactRef)}
+                className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}
+              >
+                Entrar em Contato
+              </Button>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section ref={aboutRef} className="py-24 bg-gray-900 relative overflow-hidden">
+        <div className="container mx-auto px-6">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-4xl font-bold mb-16 text-center reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
+              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                Sobre Mim
+              </span>
+            </h2>
+            <div className="grid md:grid-cols-5 gap-12 items-center">
+              <div className="md:col-span-2 reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
+                <div className="rounded-2xl overflow-hidden border border-purple-500/20 shadow-xl shadow-purple-500/10 relative">
+                  <img 
+                    src="/imagens/eu.png" 
+                    alt="Gustavo Gutierrez" 
+                    className="w-full h-auto object-cover object-top"
+                  />
+                  <div className="absolute inset-0 border-4 border-purple-500 rounded-2xl animate-pulse"></div>
+                </div>
+              </div>
+              <div className="md:col-span-3 reveal-section opacity-0 transform translate-y-8 transition-all duration-1000 delay-300">
+                <p className="text-xl text-gray-300 mb-6 leading-relaxed">
+                  Sou um desenvolvedor especializado em criar aplicações web modernas utilizando tecnologias como React, Node.js, TypeScript e Tailwind CSS. Estou sempre em busca de desafios que envolvam criatividade, performance e design de alto nível.
+                </p>
+                <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                  Com mais de 4 meses de experiência no desenvolvimento de soluções digitais, tenho trabalhado com empresas de diversos segmentos, ajudando-as a transformar suas ideias em produtos digitais de sucesso.
+                </p>
+                <div className="grid grid-cols-2 gap-6 mb-8">
+                  <div>
+                    <h3 className="text-lg font-semibold text-purple-400 mb-3">Educação</h3>
+                    <p className="text-gray-300">Cursando Analise e desenvolvimento de sistemas<br/>Faculdade Unigoias (3º Periodo)</p>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-purple-400 mb-3">Experiência</h3>
+                    <p className="text-gray-300">4 meses em desenvolvimento web<br/>4 meses com React e Node.js</p>
+                  </div>
+                </div>
+                <Button 
+                  className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}
+                >
+                  Baixar Currículo <i className="fas fa-download ml-2"></i>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </section>
+
+      {/* Technologies Section */}
+      <section ref={techRef} className="min-h-screen py-24 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-extrabold mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 tracking-wide">
+            Tecnologias
+          </h2>
+
+          {/* Carrossel */}
+          <div className="relative h-[500px] max-w-5xl mx-auto" style={{ perspective: "1200px" }}>
+            <div
+              className="w-full h-full relative"
+              style={{ transformStyle: "preserve-3d", transition: "transform 1s ease-in-out" }}
+            >
+              {technologies.map((tech, index) => {
+                const angle = (index - activeIndex) * (360 / technologies.length);
+                const radius = 300;
+
+                return (
+                  <div
+                    key={index}
+                    className="absolute w-[220px] h-[280px] left-1/2 top-1/2"
+                    style={{
+                      transform: `
+                        translate(-50%, -50%)
+                        rotateY(${angle}deg)
+                        translateZ(${radius}px)
+                      `,
+                      opacity: Math.abs(angle) > 90 ? 0.2 : 1,
+                      zIndex: Math.abs(angle) > 90 ? 0 : 10,
+                      transformStyle: "preserve-3d",
+                      transition: "all 0.5s ease-in-out",
+                    }}
+                  >
+                    <div className="w-full h-full bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md border border-purple-600/20 rounded-2xl p-6 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(128,0,255,0.2)] hover:scale-105 hover:shadow-purple-500/30 transition-all duration-500 cursor-pointer">
+                      <div className={`w-20 h-20 ${tech.color} bg-opacity-20 rounded-full flex items-center justify-center mb-6`}>
+                        <i className={`${tech.icon} text-4xl ${tech.color.replace("bg-", "text-")}`}></i>
+                      </div>
+                      <h3 className="text-xl font-extrabold text-white tracking-wide mb-1 text-center">{tech.name}</h3>
+                      <p className="text-sm text-gray-400 text-center">Experiência sólida</p>
+                      <div className="w-16 h-1 mt-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Botões */}
+          <div className="flex justify-center mt-12 space-x-8">
+            <button
+              onClick={() => rotateCarousel("prev")}
+              className={arrowButtonStyles}
+              aria-label="Anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={() => rotateCarousel("next")}
+              className={arrowButtonStyles}
+              aria-label="Próximo"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section ref={projectsRef} className="py-24 bg-gray-900 relative">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold mb-16 text-center reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
+            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Projetos
+            </span>
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {projects.map((project, index) => (
+              <div
+                key={project.id}
+                className="group relative h-80 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden reveal-section opacity-0 transform translate-y-8 transition-all duration-1000 hover:z-10 hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] hover:border-purple-500 transition-shadow duration-300"
+                style={{ transitionDelay: `${index * 150}ms` }}
+              >
+                <div className="absolute inset-0 overflow-hidden">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-110 group-hover:opacity-30"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/50 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500"></div>
+                </div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-between opacity-100 transition-all duration-500">
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">{project.title}</h3>
+                    <p className="text-gray-400 mb-4 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">{project.description}</p>
+                  </div>
+                  <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tech.map((t, i) => (
+                        <Badge key={i} className="bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 hover:shadow-[0_0_8px_rgba(168,85,247,0.6)] transition-shadow duration-300">{t}</Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300">
+                      <Button className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}>
+                        <i className="fab fa-github mr-2"></i> Código
+                      </Button>
+                      <Button className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}>
+                        Demo ao vivo
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section ref={contactRef} className="py-24 bg-black relative">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold mb-16 text-center reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
+            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Contato
+            </span>
+          </h2>
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            <div className="reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
+              <h3 className="text-2xl font-semibold mb-6 text-white">Vamos conversar</h3>
+              <p className="text-gray-300 mb-8">
+                Estou disponível para projetos freelance, oportunidades de trabalho ou simplesmente para trocar ideias sobre tecnologia e desenvolvimento.
+              </p>
+              <div className="space-y-6">
+                <div className="flex items-center group">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mr-4 group-hover:shadow-[0_0_10px_rgba(168,85,247,0.7)] transition-shadow duration-300">
+                    <Mail className="text-purple-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm text-gray-400">Email</h4>
+                    <p className="text-white group-hover:text-purple-300 transition-colors duration-300">gustavogutierrez0311@gmail.com</p>
+                  </div>
+                </div>
+                <div className="flex items-center group">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mr-4 group-hover:shadow-[0_0_10px_rgba(168,85,247,0.7)] transition-shadow duration-300">
+                    <MapPin className="text-purple-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm text-gray-400">Localização</h4>
+                    <p className="text-white group-hover:text-purple-300 transition-colors duration-300">Goiânia - GO, Brasil</p>
+                  </div>
+                </div>
+                <div className="flex items-center group">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mr-4 group-hover:shadow-[0_0_10px_rgba(168,85,247,0.7)] transition-shadow duration-300">
+                    <Phone className="text-purple-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm text-gray-400">Telefone</h4>
+                    <p className="text-white group-hover:text-purple-300 transition-colors duration-300">+55 62982772393</p>
+                  </div>
+                </div>
+                <div className="flex items-center group">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mr-4 group-hover:shadow-[0_0_10px_rgba(168,85,247,0.7)] transition-shadow duration-300">
+                    <Instagram className="text-purple-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm text-gray-400">Instagram</h4>
+                    <p className="text-white group-hover:text-purple-300 transition-colors duration-300">@gustavoo_gutierrez</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="reveal-section opacity-0 transform translate-y-8 transition-all duration-1000 delay-300">
+              <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
+                <h3 className="text-2xl font-semibold mb-6 text-white">Envie uma mensagem</h3>
+                <form className="space-y-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Nome</label>
+                    <Input 
+                      id="name" 
+                      type="text" 
+                      placeholder="Seu nome" 
+                      className="w-full bg-gray-700/50 border-gray-600 focus:border-purple-500 text-white placeholder-gray-400 focus:ring-purple-500 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="seu.email@exemplo.com" 
+                      className="w-full bg-gray-700/50 border-gray-600 focus:border-purple-500 text-white placeholder-gray-400 focus:ring-purple-500 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Mensagem</label>
+                    <Textarea 
+                      id="message" 
+                      placeholder="Sua mensagem aqui..." 
+                      rows={5}
+                      className="w-full bg-gray-700/50 border-gray-600 focus:border-purple-500 text-white placeholder-gray-400 focus:ring-purple-500 rounded-lg"
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}
+                  >
+                    Enviar Mensagem
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+     
+      {/* Add reveal class to sections */}
+      <style jsx>{`
+        .reveal-section {
+          transition: all 1s ease;
+        }
+        .reveal-section.active {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `}</style>
     </div>
   );
-}
+};
+
+export default App;

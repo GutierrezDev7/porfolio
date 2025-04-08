@@ -28,6 +28,28 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="py-12 bg-gray-900 border-t border-gray-800 text-center">
+          <div className="container mx-auto px-6">
+            <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-2">
+              Gustavo Gutierrez
+            </div>
+            <p className="text-gray-400 mb-4">Desenvolvedor Full Stack</p>
+            <div className="flex justify-center space-x-8 text-gray-400">
+              <a href="#" className="hover:text-white transition-colors cursor-pointer">Início</a>
+              <a href="#" className="hover:text-white transition-colors cursor-pointer">Sobre</a>
+              <a href="#" className="hover:text-white transition-colors cursor-pointer">Projetos</a>
+              <a href="#" className="hover:text-white transition-colors cursor-pointer">Contato</a>
+            </div>
+            <div className="border-t border-gray-800 mt-8 pt-8">
+              <p className="text-gray-500 text-sm mb-4">
+                © {new Date().getFullYear()} Gustavo Gutierrez. Todos os direitos reservados.
+              </p>
+              <div className="flex justify-center items-center space-x-4">
+                <span className="text-gray-500 text-sm">Feito com Inteligência!</span>
+              </div>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );
