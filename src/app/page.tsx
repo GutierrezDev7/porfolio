@@ -308,8 +308,12 @@ const App: React.FC = () => {
                     }}
                   >
                     <div className="w-full h-full bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md border border-purple-600/20 rounded-2xl p-4 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(128,0,255,0.2)] hover:scale-110 hover:shadow-purple-500/40 transition-all duration-500 cursor-pointer">
-                      <div className={`w-14 h-14 ${tech.color} bg-opacity-20 rounded-full flex items-center justify-center mb-4`}> {/* Ícone maior */}
-                        <i className={`${tech.icon} text-3xl ${tech.color.replace("bg-", "text-")}`}></i>
+                      <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4">
+                        <img
+                          src={`/imagens/${tech.name === "Node.js" ? "node" : tech.name.toLowerCase().replace(/\./g, "-")}.png`}
+                          alt={tech.name}
+                          className="w-full h-full object-contain"
+                        />
                       </div>
                       <h3 className="text-lg font-extrabold text-white tracking-wide mb-1 text-center">{tech.name}</h3>
                       <p className="text-sm text-gray-400 text-center">Experiência sólida</p>
