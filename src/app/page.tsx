@@ -6,7 +6,7 @@ import { Mail, MapPin, Phone, Instagram } from 'lucide-react';
 
 // Implementação manual de debounce
 function debounce(func: (...args: any[]) => void, wait: number) {
-  let timeout: NodeJS.Timeout;
+  let timeout: ReturnType<typeof setTimeout>;
   return (...args: any[]) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
@@ -184,8 +184,8 @@ const App: React.FC = () => {
         <div className="container mx-auto px-6 z-10 text-center">
           <div className="max-w-3xl mx-auto">
             <motion.h1
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-5xl md:text-7xl font-bold mb-6 p-2 rounded-lg inline-block bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
             >
@@ -193,8 +193,8 @@ const App: React.FC = () => {
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 40, blur: 10 }}
-              animate={{ opacity: 1, y: 0, blur: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-300 mb-8 p-2 rounded-lg"
             >
@@ -493,7 +493,7 @@ const App: React.FC = () => {
       </section>
      
       {/* Add reveal class to sections */}
-      <style jsx>{`
+      <style>{`
         .reveal-section {
           transition: all 1s ease;
         }
