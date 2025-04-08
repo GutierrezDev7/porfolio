@@ -282,19 +282,19 @@ const App: React.FC = () => {
           </h2>
 
           {/* Carrossel */}
-          <div className="relative h-[300px] max-w-4xl mx-auto mt-[-20px]" style={{ perspective: "1000px" }}>
+          <div className="relative h-[350px] max-w-5xl mx-auto mt-[-20px]" style={{ perspective: "1200px" }}>
             <div
               className="w-full h-full relative"
               style={{ transformStyle: "preserve-3d", transition: "transform 1s ease-in-out" }}
             >
               {technologies.map((tech, index) => {
                 const angle = (index - activeIndex) * (360 / technologies.length);
-                const radius = 250; // Retornado ao tamanho original, mas ajustado para ser um pouco menor
+                const radius = 300; // Aumentado para um tamanho maior
 
                 return (
                   <div
                     key={index}
-                    className="absolute w-[150px] h-[200px] left-1/2 top-1/2"
+                    className="absolute w-[180px] h-[230px] left-1/2 top-1/2"
                     style={{
                       transform: `
                         translate(-50%, -50%)
@@ -307,13 +307,13 @@ const App: React.FC = () => {
                       transition: "all 0.5s ease-in-out",
                     }}
                   >
-                    <div className="w-full h-full bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md border border-purple-600/20 rounded-2xl p-4 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(128,0,255,0.2)] hover:scale-105 hover:shadow-purple-500/30 transition-all duration-500 cursor-pointer">
-                      <div className={`w-12 h-12 ${tech.color} bg-opacity-20 rounded-full flex items-center justify-center mb-4`}>
-                        <i className={`${tech.icon} text-2xl ${tech.color.replace("bg-", "text-")}`}></i>
+                    <div className="w-full h-full bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md border border-purple-600/20 rounded-2xl p-4 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(128,0,255,0.2)] hover:scale-110 hover:shadow-purple-500/40 transition-all duration-500 cursor-pointer">
+                      <div className={`w-14 h-14 ${tech.color} bg-opacity-20 rounded-full flex items-center justify-center mb-4`}> {/* Ícone maior */}
+                        <i className={`${tech.icon} text-3xl ${tech.color.replace("bg-", "text-")}`}></i>
                       </div>
-                      <h3 className="text-md font-extrabold text-white tracking-wide mb-1 text-center">{tech.name}</h3>
+                      <h3 className="text-lg font-extrabold text-white tracking-wide mb-1 text-center">{tech.name}</h3>
                       <p className="text-sm text-gray-400 text-center">Experiência sólida</p>
-                      <div className="w-10 h-1 mt-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                      <div className="w-12 h-1 mt-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
                     </div>
                   </div>
                 );
@@ -322,10 +322,10 @@ const App: React.FC = () => {
           </div>
 
           {/* Botões */}
-          <div className="flex justify-center mt-4 space-x-4">
+          <div className="flex justify-center mt-6 space-x-6">
             <button
               onClick={() => rotateCarousel("prev")}
-              className="w-8 h-8 flex items-center justify-center text-white rounded-full transition-transform duration-300 hover:scale-110 hover:text-purple-500"
+              className="w-10 h-10 flex items-center justify-center text-white rounded-full transition-transform duration-300 hover:scale-110 hover:text-purple-500 bg-gray-800/50 border border-gray-700 hover:border-purple-500 shadow-md"
               aria-label="Anterior"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
@@ -334,7 +334,7 @@ const App: React.FC = () => {
             </button>
             <button
               onClick={() => rotateCarousel("next")}
-              className="w-8 h-8 flex items-center justify-center text-white rounded-full transition-transform duration-300 hover:scale-110 hover:text-purple-500"
+              className="w-10 h-10 flex items-center justify-center text-white rounded-full transition-transform duration-300 hover:scale-110 hover:text-purple-500 bg-gray-800/50 border border-gray-700 hover:border-purple-500 shadow-md"
               aria-label="Próximo"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
