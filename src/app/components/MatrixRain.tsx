@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 const MatrixRain = () => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -17,10 +17,10 @@ const MatrixRain = () => {
     const mathChars = '+-*=%';
     const fontSize = 16;
     const columns = Math.floor(canvas.width / fontSize);
-    const drops = [];
-    const charTypes = [];
-    const colors = [];
-    const speeds = [];
+    const drops: number[] = [];
+    const charTypes: any[] = [];
+    const colors: string[] = [];
+    const speeds: number[] = [];
 
     for (let i = 0; i < columns; i++) {
       drops[i] = Math.random() * -100;
