@@ -194,7 +194,7 @@ const App: React.FC = () => {
               <div className="md:col-span-2 reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
                 <div className="rounded-2xl overflow-hidden border border-purple-500/20 shadow-xl shadow-purple-500/10 relative">
                   <img 
-                    src="/imagens/eu.png" 
+                    src="/imagens/eu2.png" 
                     alt="Gustavo Gutierrez" 
                     className="w-full h-auto object-cover object-top"
                   />
