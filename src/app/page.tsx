@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, Instagram } from 'lucide-react';
+import MatrixRain from "./components/MatrixRain";
 
 // Implementação manual de debounce
 function debounce(func: (...args: any[]) => void, wait: number) {
@@ -125,7 +126,7 @@ const App: React.FC = () => {
   const arrowButtonStyles = "w-12 h-12 flex items-center justify-center bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full shadow-md hover:scale-110 transition-transform duration-300 z-10";
 
   return (
-    <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen text-white font-sans">
+    <div className="bg-black min-h-screen text-white font-sans">
       {/* Scroll Progress Bar */}
       <div 
         className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 z-50" 
@@ -144,19 +145,13 @@ const App: React.FC = () => {
       </motion.button>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full bg-gray-900/80 backdrop-blur-md z-40 shadow-md">
+      <nav className="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md z-40 shadow-md">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent hover:drop-shadow-glow transition duration-300">
             GG
           </div>
           <div className="hidden md:flex space-x-8">
-            {[
-              { label: "Início", ref: heroRef },
-              { label: "Sobre", ref: aboutRef },
-              { label: "Tecnologias", ref: techRef },
-              { label: "Projetos", ref: projectsRef },
-              { label: "Contato", ref: contactRef },
-            ].map(({ label, ref }) => (
+            {[{ label: "Início", ref: heroRef }, { label: "Sobre", ref: aboutRef }, { label: "Tecnologias", ref: techRef }, { label: "Projetos", ref: projectsRef }, { label: "Contato", ref: contactRef }].map(({ label, ref }) => (
               <button
                 key={label}
                 onClick={() => scrollToSection(ref)}
@@ -172,60 +167,22 @@ const App: React.FC = () => {
       {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center pt-24"
-        style={{
-          backgroundImage: `url('https://public.readdy.ai/ai/img_res/c4cc4d143787a60ea64e9f6de0ad8613.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-        }}
+        className="relative min-h-screen flex items-center justify-center pt-24 bg-gradient-to-br from-black via-gray-900 to-purple-900 overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-black/30"></div>
-        <div className="container mx-auto px-6 z-10 text-center">
-          <div className="max-w-3xl mx-auto">
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-7xl font-bold mb-6 p-2 rounded-lg inline-block bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
-            >
-              Gustavo Gutierrez
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-gray-300 mb-8 p-2 rounded-lg"
-            >
-              Desenvolvedor Full Stack apaixonado por transformar ideias em experiências digitais.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-wrap gap-4 justify-center"
-            >
-              <Button
-                onClick={() => scrollToSection(projectsRef)}
-                className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}
-              >
-                Ver Projetos
-              </Button>
-              <Button
-                onClick={() => scrollToSection(contactRef)}
-                className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}
-              >
-                Entrar em Contato
-              </Button>
-            </motion.div>
-          </div>
+        <MatrixRain />
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center">
+          <h1 className="text-7xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 drop-shadow-[0_0_50px_rgba(128,0,255,1)] animate-fade-in">
+            Gustavo Gutierrez
+          </h1>
+          <p className="text-3xl md:text-4xl text-gray-200 mt-8 max-w-4xl leading-relaxed drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] text-center">
+            Desenvolvedor Full Stack apaixonado por transformar ideias em experiências digitais inovadoras e impactantes.
+          </p>
         </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50"></div>
       </section>
 
       {/* About Section */}
-      <section ref={aboutRef} className="py-24 bg-gray-900 relative overflow-hidden">
+      <section ref={aboutRef} className="py-24 bg-black relative overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-4xl font-bold mb-16 text-center reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
@@ -237,7 +194,7 @@ const App: React.FC = () => {
               <div className="md:col-span-2 reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
                 <div className="rounded-2xl overflow-hidden border border-purple-500/20 shadow-xl shadow-purple-500/10 relative">
                   <img 
-                    src="/imagens/eu.png" 
+                    src="/imagens/eu2.png" 
                     alt="Gustavo Gutierrez" 
                     className="w-full h-auto object-cover object-top"
                   />
@@ -270,8 +227,6 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
       </section>
 
       {/* Technologies Section */}
@@ -282,19 +237,19 @@ const App: React.FC = () => {
           </h2>
 
           {/* Carrossel */}
-          <div className="relative h-[500px] max-w-5xl mx-auto" style={{ perspective: "1200px" }}>
+          <div className="relative h-[350px] max-w-5xl mx-auto mt-[-20px]" style={{ perspective: "1200px" }}>
             <div
               className="w-full h-full relative"
               style={{ transformStyle: "preserve-3d", transition: "transform 1s ease-in-out" }}
             >
               {technologies.map((tech, index) => {
                 const angle = (index - activeIndex) * (360 / technologies.length);
-                const radius = 300;
+                const radius = 300; // Aumentado para um tamanho maior
 
                 return (
                   <div
                     key={index}
-                    className="absolute w-[220px] h-[280px] left-1/2 top-1/2"
+                    className="absolute w-[180px] h-[230px] left-1/2 top-1/2"
                     style={{
                       transform: `
                         translate(-50%, -50%)
@@ -307,13 +262,17 @@ const App: React.FC = () => {
                       transition: "all 0.5s ease-in-out",
                     }}
                   >
-                    <div className="w-full h-full bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md border border-purple-600/20 rounded-2xl p-6 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(128,0,255,0.2)] hover:scale-105 hover:shadow-purple-500/30 transition-all duration-500 cursor-pointer">
-                      <div className={`w-20 h-20 ${tech.color} bg-opacity-20 rounded-full flex items-center justify-center mb-6`}>
-                        <i className={`${tech.icon} text-4xl ${tech.color.replace("bg-", "text-")}`}></i>
+                    <div className="w-full h-full bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md border border-purple-600/20 rounded-2xl p-4 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(128,0,255,0.2)] hover:scale-110 hover:shadow-purple-500/40 transition-all duration-500 cursor-pointer">
+                      <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4">
+                        <img
+                          src={`/imagens/${tech.name === "Node.js" ? "node" : tech.name.toLowerCase().replace(/\./g, "-")}.png`}
+                          alt={tech.name}
+                          className="w-full h-full object-contain"
+                        />
                       </div>
-                      <h3 className="text-xl font-extrabold text-white tracking-wide mb-1 text-center">{tech.name}</h3>
+                      <h3 className="text-lg font-extrabold text-white tracking-wide mb-1 text-center">{tech.name}</h3>
                       <p className="text-sm text-gray-400 text-center">Experiência sólida</p>
-                      <div className="w-16 h-1 mt-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                      <div className="w-12 h-1 mt-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
                     </div>
                   </div>
                 );
@@ -322,10 +281,10 @@ const App: React.FC = () => {
           </div>
 
           {/* Botões */}
-          <div className="flex justify-center mt-12 space-x-8">
+          <div className="flex justify-center mt-6 space-x-6">
             <button
               onClick={() => rotateCarousel("prev")}
-              className={arrowButtonStyles}
+              className="w-10 h-10 flex items-center justify-center text-white rounded-full transition-transform duration-300 hover:scale-110 hover:text-purple-500 bg-gray-800/50 border border-gray-700 hover:border-purple-500 shadow-md"
               aria-label="Anterior"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
@@ -334,7 +293,7 @@ const App: React.FC = () => {
             </button>
             <button
               onClick={() => rotateCarousel("next")}
-              className={arrowButtonStyles}
+              className="w-10 h-10 flex items-center justify-center text-white rounded-full transition-transform duration-300 hover:scale-110 hover:text-purple-500 bg-gray-800/50 border border-gray-700 hover:border-purple-500 shadow-md"
               aria-label="Próximo"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
@@ -346,7 +305,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Projects Section */}
-      <section ref={projectsRef} className="py-24 bg-gray-900 relative">
+      <section ref={projectsRef} className="py-24 bg-black relative">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold mb-16 text-center reveal-section opacity-0 transform translate-y-8 transition-all duration-1000">
             <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
@@ -366,6 +325,7 @@ const App: React.FC = () => {
                     alt={project.title}
                     className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-110 group-hover:opacity-30"
                   />
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-80 transition-opacity duration-500"></div>
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/50 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500"></div>
                 </div>
                 <div className="absolute inset-0 p-6 flex flex-col justify-between opacity-100 transition-all duration-500">
@@ -491,7 +451,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </section>
-     
+
       {/* Add reveal class to sections */}
       <style>{`
         .reveal-section {
