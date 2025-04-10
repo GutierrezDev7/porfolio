@@ -19,7 +19,7 @@ const MatrixRain = () => {
     const columns = Math.floor(canvas.width / fontSize);
     const drops: number[] = [];
     const charTypes: any[] = [];
-    const colors: string[] = [];
+    const colors: string[] = Array(columns).fill('hsl(280, 100%, 70%)'); // Cor neon roxo
     const speeds: number[] = [];
 
     for (let i = 0; i < columns; i++) {
@@ -27,19 +27,15 @@ const MatrixRain = () => {
       const rand = Math.random();
       if (rand < 0.15) {
         charTypes[i] = 'special';
-        colors[i] = `hsl(${Math.random() * 360}, 100%, 70%)`;
         speeds[i] = 0.8 + Math.random() * 0.4;
       } else if (rand < 0.35) {
         charTypes[i] = 'program';
-        colors[i] = `hsl(${Math.random() * 60 + 180}, 100%, 65%)`;
         speeds[i] = 1 + Math.random() * 0.5;
       } else if (rand < 0.55) {
         charTypes[i] = 'math';
-        colors[i] = `hsl(${Math.random() * 60 + 120}, 100%, 60%)`;
         speeds[i] = 1.2 + Math.random() * 0.6;
       } else {
         charTypes[i] = 'alpha';
-        colors[i] = `hsl(${Math.random() * 60 + 240}, 100%, 75%)`;
         speeds[i] = 1.5 + Math.random() * 0.7;
       }
     }
@@ -83,10 +79,10 @@ const MatrixRain = () => {
         ctx.fillText(text, x, y);
         ctx.globalAlpha = 1;
         ctx.shadowBlur = 0;
-        drops[i] += speeds[i] * 0.3; // Reduzi ainda mais a velocidade
+        drops[i] += speeds[i] * 0.15; // Reduzi a velocidade pela metade
         if (drops[i] * fontSize > canvas.height) {
           drops[i] = 0; // Reinicia a posição da coluna
-          colors[i] = `hsl(${Math.random() * 360}, 100%, 70%)`; // Atualiza a cor para um novo ciclo
+          colors[i] = 'hsl(280, 100%, 70%)'; // Mantém a cor neon roxa
         }
       }
       requestAnimationFrame(draw);

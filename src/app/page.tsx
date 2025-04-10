@@ -55,11 +55,12 @@ const App: React.FC = () => {
   useEffect(() => {
     const revealSections = () => {
       const sections = document.querySelectorAll('.reveal-section');
-      sections.forEach((section) => {
+      sections.forEach((section, index) => {
         const sectionTop = section.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
         if (sectionTop < windowHeight - 100) {
           section.classList.add('active');
+          section.style.transitionDelay = `${index * 0.2}s`; // Adiciona um atraso progressivo
         }
       });
     };
@@ -132,18 +133,7 @@ const App: React.FC = () => {
         className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 z-50" 
         style={{ width: `${scrollProgress}%` }}
       />
-
-      {/* Back to Top Button */}
-      <motion.button
-        onClick={scrollToTop}
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 40 }}
-        transition={{ duration: 0.4 }}
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-teal-500 to-green-500 p-3 rounded-full shadow-xl hover:shadow-[0_0_20px_rgba(72,187,120,0.7)] transition-all duration-300 z-40 cursor-pointer"
-      >
-        <i className="fas fa-arrow-up text-white text-lg"></i>
-      </motion.button>
-
+      
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md z-40 shadow-md">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -455,7 +445,9 @@ const App: React.FC = () => {
       {/* Add reveal class to sections */}
       <style>{`
         .reveal-section {
-          transition: all 1s ease;
+          opacity: 0;
+          transform: translateY(50px);
+          transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
         .reveal-section.active {
           opacity: 1;
