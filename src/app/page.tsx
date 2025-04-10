@@ -61,7 +61,7 @@ const App: React.FC = () => {
         const windowHeight = window.innerHeight;
         if (sectionTop < windowHeight - 100) {
           section.classList.add('active');
-          section.style.transitionDelay = `${index * 0.2}s`; // Adiciona um atraso progressivo
+          (section as HTMLElement).style.transitionDelay = `${index * 0.2}s`; // Adiciona um atraso progressivo
         }
       });
     };
