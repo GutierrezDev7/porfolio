@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, Instagram } from 'lucide-react';
 import MatrixRain from "./components/MatrixRain";
+import emailjs from 'emailjs-com';
 
 // Implementação manual de debounce
 function debounce(func: (...args: any[]) => void, wait: number) {
@@ -125,6 +126,20 @@ const App: React.FC = () => {
   const buttonExpandEffect = "hover:scale-105";
 
   const arrowButtonStyles = "w-12 h-12 flex items-center justify-center bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full shadow-md hover:scale-110 transition-transform duration-300 z-10";
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  const handleInputChange = () => {
+    const name = (document.getElementById('name') as HTMLInputElement)?.value.trim();
+    const email = (document.getElementById('email') as HTMLInputElement)?.value.trim();
+    const message = (document.getElementById('message') as HTMLTextAreaElement)?.value.trim();
+
+    if (name && email && message) {
+      setIsButtonDisabled(false);
+    } else {
+      setIsButtonDisabled(true);
+    }
+  };
 
   return (
     <div className="bg-black min-h-screen text-white font-sans">
@@ -401,40 +416,83 @@ const App: React.FC = () => {
             <div className="reveal-section opacity-0 transform translate-y-8 transition-all duration-1000 delay-300">
               <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
                 <h3 className="text-2xl font-semibold mb-6 text-white">Envie uma mensagem</h3>
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target as HTMLFormElement);
+                  console.log('Dados enviados:', Object.fromEntries(formData.entries()));
+                  emailjs.sendForm(
+                    'service_hbzy1wu',
+                    'template_itzppya',
+                    e.target as HTMLFormElement,
+                    'BmBHizKaDmz4zvUUf'
+                  ).then((result) => {
+                    console.log('Mensagem enviada com sucesso:', result.text);
+                    alert('Mensagem enviada com sucesso!');
+                  }).catch((error) => {
+                    console.error('Erro ao enviar mensagem:', error.text);
+                    alert('Erro ao enviar mensagem. Tente novamente mais tarde.');
+                  });
+                }}>
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Nome</label>
                     <Input 
                       id="name" 
+                      name="nome" 
                       type="text" 
                       placeholder="Seu nome" 
                       className="w-full bg-gray-700/50 border-gray-600 focus:border-purple-500 text-white placeholder-gray-400 focus:ring-purple-500 rounded-lg"
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">Email</label>
                     <Input 
                       id="email" 
+                      name="email" 
                       type="email" 
                       placeholder="seu.email@exemplo.com" 
                       className="w-full bg-gray-700/50 border-gray-600 focus:border-purple-500 text-white placeholder-gray-400 focus:ring-purple-500 rounded-lg"
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Mensagem</label>
                     <Textarea 
                       id="message" 
+                      name="mensagem" 
                       placeholder="Sua mensagem aqui..." 
                       rows={5}
                       className="w-full bg-gray-700/50 border-gray-600 focus:border-purple-500 text-white placeholder-gray-400 focus:ring-purple-500 rounded-lg"
+                      onChange={handleInputChange}
                     />
                   </div>
-                  <Button 
-                    type="submit" 
-                    className={`${buttonBaseStyles} ${buttonPrimaryStyles} ${buttonExpandEffect}`}
-                  >
-                    Enviar Mensagem
-                  </Button>
+                  <div className="flex space-x-4">
+                    <Button 
+                      type="button" 
+                      className="bg-violet-950 text-violet-400 border border-violet-400 border-b-4 font-medium overflow-hidden relative px-4 py-2 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group"
+                      onClick={(e) => {
+                        if (isButtonDisabled) {
+                          e.preventDefault();
+                          alert('Preencha todos os campos, antes de prosseguir.');
+                        } else {
+                          const form = e.currentTarget.closest('form');
+                          form?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                        }
+                      }}
+                    >
+                      <span className="bg-violet-400 shadow-violet-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]" />
+                      Enviar Mensagem
+                    </Button>
+                    <a 
+                      href="https://wa.me/62982772393" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="bg-green-950 text-green-400 border border-green-400 border-b-4 font-medium overflow-hidden relative px-4 py-2 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group"
+                    >
+                      <span className="bg-green-400 shadow-green-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]" />
+                      WhatsApp
+                    </a>
+                  </div>
                 </form>
               </div>
             </div>
